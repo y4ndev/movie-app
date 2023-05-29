@@ -1,7 +1,19 @@
 import React from "react";
+import { Input } from "antd";
 
-const Search: React.FC = () => {
-  return <div>Search</div>;
+const { Search } = Input;
+
+const _Search: React.FC = () => {
+  return (
+    <>
+      <Search
+        placeholder="input search text"
+        enterButton
+        size="large"
+        style={{ width: 450, margin: "0 auto" }}
+      />
+    </>
+  );
 };
 
-export { Search };
+export { _Search };

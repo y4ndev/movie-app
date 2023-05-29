@@ -1,1 +1,1 @@
-export { Search } from "./Search";
+export { _Search } from "./Search";

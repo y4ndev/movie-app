@@ -20,11 +20,22 @@ const Catalog: React.FC<ICatalog> = ({ movies, page, setCurrent }) => {
     <>
       <Row gutter={[10, 10]}>
         {movies.map((item: IData) => (
-          <Col key={item.filmId} md={{ span: 6 }} xs={24}>
-            <Card style={{ textAlign: "center" }}>
-              {" "}
-              <Image height={400} src={item.posterUrl} />
-              <Text type="secondary">
+          <Col key={item.filmId} lg={{ span: 6 }} md={{ span: 6 }} xs={24}>
+            <Card
+              hoverable
+              style={{ maxWidth: 320, textAlign: "center" }}
+              cover={
+                <img
+                  alt="example"
+                  src={item.posterUrl}
+                  style={{
+                    height: 440,
+                    objectFit: "cover",
+                  }}
+                />
+              }
+            >
+              <Text style={{ display: "block" }} type="secondary">
                 <Link> {item.nameRu}</Link>
               </Text>
             </Card>
