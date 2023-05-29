@@ -12,4 +12,5 @@ export interface IData {
   ratingKinopoisk?: number;
   type?: string;
   year?: number;
+  filmId?: number;
 }
