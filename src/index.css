@@ -13,3 +13,13 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+
+.card img {
+  transition: all 0.5s;
+}
+
+.card img:hover {
+  transform: scale(1.06);
+  transition: all 0.5s;
+}

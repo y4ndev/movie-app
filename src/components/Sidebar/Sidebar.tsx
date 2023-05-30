@@ -1,8 +1,9 @@
 import React from "react";
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
-
+import { Layout, Menu, Image, Typography } from "antd";
+import logo from "../../assets/img/logo.png";
 const { Sider } = Layout;
+const { Title } = Typography;
+const menuList = ["Жанры", "Премьеры", "Избранное"];
 
 const Sidebar: React.FC = () => {
   return (
@@ -18,17 +19,22 @@ const Sidebar: React.FC = () => {
         }}
       >
         <div className="demo-logo-vertical" />
+        <Image src={logo} preview={false} />
+        <Title
+          italic
+          style={{ textAlign: "center", marginTop: 10, marginBottom: 50, color: "#ffffff" }}
+          level={3}
+        >
+          Movie-app
+        </Title>
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["4"]}
-          items={[UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-            (icon, index) => ({
-              key: String(index + 1),
-              icon: React.createElement(icon),
-              label: `nav ${index + 1}`,
-            })
-          )}
+          items={menuList.map((item, index) => ({
+            key: String(index + 1),
+            label: `${item}`,
+          }))}
         />
       </Sider>
     </>

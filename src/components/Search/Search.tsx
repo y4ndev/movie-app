@@ -7,7 +7,7 @@ const _Search: React.FC = () => {
   return (
     <>
       <Search
-        placeholder="input search text"
+        placeholder="Поиск..."
         enterButton
         size="large"
         style={{ width: 450, margin: "0 auto" }}

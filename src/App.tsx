@@ -81,7 +81,7 @@ const App: React.FC = () => {
                 }}
               >
                 {genresArr.map((item: string) => (
-                  <Radio.Button style={{ marginBottom: 10 }} value={item}>
+                  <Radio.Button style={{ marginBottom: 10, borderRadius: 0 }} value={item}>
                     {item}
                   </Radio.Button>
                 ))}
