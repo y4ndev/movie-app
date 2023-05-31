@@ -9,9 +9,11 @@ interface ICatalog {
   movies: IData[];
   page: number;
   setCurrent: (page: number) => void;
+  loading: boolean;
+  
 }
 
-const Catalog: React.FC<ICatalog> = ({ movies, page, setCurrent }) => {
+const Catalog: React.FC<ICatalog> = ({ movies, page, setCurrent, loading }) => {
   const onChange: PaginationProps["onChange"] = (page) => {
     console.log(page);
     setCurrent(page);
@@ -22,22 +24,18 @@ const Catalog: React.FC<ICatalog> = ({ movies, page, setCurrent }) => {
         {movies.map((item: IData) => (
           <Col key={item.filmId} lg={{ span: 6 }} md={{ span: 6 }} xs={24}>
             <Card
-              className="card"
+              className={loading ? "card active" : "card"}
               hoverable
               style={{ maxWidth: 320, textAlign: "center", overflow: "hidden" }}
               cover={
-                item ? (
-                  <img
-                    alt="example"
-                    src={item.posterUrl}
-                    style={{
-                      height: 440,
-                      objectFit: "cover",
-                    }}
-                  />
-                ) : (
-                  <Spin />
-                )
+                <img
+                  alt="example"
+                  src={item.posterUrl}
+                  style={{
+                    height: 440,
+                    objectFit: "cover",
+                  }}
+                />
               }
             >
               <Text style={{ display: "block" }} type="secondary">

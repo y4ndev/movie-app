@@ -14,12 +14,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+.card.active img {
+  opacity: 1;
+}
 
 .card img {
-  transition: all 0.5s;
+  transition: all 0.3s;
+  opacity: 0;
 }
 
 .card img:hover {
   transform: scale(1.06);
-  transition: all 0.5s;
+  transition: 0.3s ease-in;
 }

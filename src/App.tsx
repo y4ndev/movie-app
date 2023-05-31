@@ -2,41 +2,74 @@ import React from "react";
 import axios from "axios";
 import { _Header } from "./components/Header";
 import { _Search } from "./components/Search";
-import { Layout, Menu, theme, Input, Radio } from "antd";
+import { Layout, theme } from "antd";
 import { Catalog } from "./components/Catalog";
 import { IData } from "./types/data";
 import { Sidebar } from "./components/Sidebar/Sidebar";
+import { Sort } from "./components/Sort";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 
-const genresArr = [
-  "Боевики",
-  "Военные",
-  "Детективы",
-  "Документальные",
-  "Драмы",
-  "Исторические",
-  "Комедии",
-  "Криминал",
-  "Мелодрамы",
-  "Мультфильмы",
-  "Приключения",
-  "Семейные",
-  "Триллеры",
-  "Ужасы",
-  "Фантастика",
-  "Фэнтези",
-];
+export const genresArr = {
+  genres: [
+    { id: 1, genre: "Триллер" },
+    { id: 2, genre: "Драма" },
+    { id: 3, genre: "Криминал" },
+    { id: 4, genre: "Мелодрама" },
+    { id: 5, genre: "Детектив" },
+    { id: 6, genre: "Фантастика" },
+    { id: 7, genre: "Приключения" },
+    { id: 8, genre: "Биография" },
+    { id: 9, genre: "Фильм-нуар" },
+    { id: 10, genre: "Вестерн" },
+    { id: 11, genre: "Боевик" },
+    { id: 12, genre: "Фэнтези" },
+    { id: 13, genre: "Комедия" },
+    { id: 14, genre: "Военный" },
+    { id: 15, genre: "История" },
+    { id: 16, genre: "Музыка" },
+    { id: 17, genre: "Ужасы" },
+    { id: 18, genre: "Мультфильм" },
+    { id: 19, genre: "Семейный" },
+    { id: 20, genre: "Мюзикл" },
+    { id: 21, genre: "Спорт" },
+    { id: 22, genre: "Документальный" },
+    { id: 23, genre: "Короткометражка" },
+    { id: 24, genre: "Аниме" },
+    { id: 25, genre: "" },
+    { id: 26, genre: "Новости" },
+    { id: 27, genre: "Концерт" },
+    { id: 28, genre: "Для взрослых" },
+    { id: 29, genre: "Церемония" },
+    { id: 30, genre: "Реальное ТВ" },
+    { id: 31, genre: "Игра" },
+    { id: 32, genre: "Ток-шоу" },
+    { id: 33, genre: "Детский" },
+  ],
+};
 
 const App: React.FC = () => {
   const [data, setData] = React.useState<IData[]>([]);
   const [currentPage, setCurrentPage] = React.useState<number>(1);
+  const [dataStatus, setDataStatus] = React.useState<boolean>(false);
+  const [filter, setFilter] = React.useState<string>("");
 
   React.useEffect(() => {
-    console.log("fetching");
+    const _filter = `&genres=${filter}`;
+    // axios
+    //   .get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/filters`, {
+    //     method: "GET",
+    //     headers: {
+    //       "X-API-KEY": "4c89bc1d-4237-4c3a-a0e0-0f740083b048",
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //   .then((res) => console.log(res));
     axios
       .get(
-        `https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_100_POPULAR_FILMS&page=${currentPage}`,
+        `https://kinopoiskapiunofficial.tech/api/v2.2/films/?page=${currentPage}${
+          filter !== "" ? _filter : ""
+        }`,
         {
           method: "GET",
           headers: {
@@ -46,15 +79,20 @@ const App: React.FC = () => {
         }
       )
       .then((res) => {
-        setData(res.data.films);
+        setTimeout(() => {
+          setDataStatus(true);
+        }, 700);
+        console.log(res);
+        setData(res.data.items);
       });
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: "smooth",
     });
-  }, [currentPage]);
-  console.log(data);
+
+    setDataStatus(false);
+  }, [currentPage, filter]);
 
   const {
     token: { colorBgContainer },
@@ -68,25 +106,13 @@ const App: React.FC = () => {
         <Layout>
           <Content style={{ margin: "0 22px 0" }}>
             <div style={{ padding: 24, minHeight: "700px", background: colorBgContainer }}>
-              <Radio.Group
-                size="large"
-                defaultValue="a"
-                buttonStyle="solid"
-                style={{
-                  marginBottom: 15,
-                  display: "inline-flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                {genresArr.map((item: string) => (
-                  <Radio.Button style={{ marginBottom: 10, borderRadius: 0 }} value={item}>
-                    {item}
-                  </Radio.Button>
-                ))}
-              </Radio.Group>
-              <Catalog setCurrent={setCurrentPage} page={currentPage} movies={data} />
+              <Sort setFilter={setFilter} />
+              <Catalog
+                loading={dataStatus}
+                setCurrent={setCurrentPage}
+                page={currentPage}
+                movies={data}
+              />
             </div>
           </Content>
           <Footer style={{ textAlign: "center" }}>Ant Design ©2023 Created by Ant UED</Footer>
