@@ -1,5 +1,6 @@
 import React from "react";
 import type { PaginationProps } from "antd";
+import { CSSTransition } from "react-transition-group";
 import { Card, Spin, Row, Col, Typography, Pagination } from "antd";
 import { IData } from "../../types/data";
 
@@ -10,7 +11,6 @@ interface ICatalog {
   page: number;
   setCurrent: (page: number) => void;
   loading: boolean;
-  
 }
 
 const Catalog: React.FC<ICatalog> = ({ movies, page, setCurrent, loading }) => {
@@ -24,23 +24,32 @@ const Catalog: React.FC<ICatalog> = ({ movies, page, setCurrent, loading }) => {
         {movies.map((item: IData) => (
           <Col key={item.filmId} lg={{ span: 6 }} md={{ span: 6 }} xs={24}>
             <Card
-              className={loading ? "card active" : "card"}
               hoverable
               style={{ maxWidth: 320, textAlign: "center", overflow: "hidden" }}
               cover={
-                <img
-                  alt="example"
-                  src={item.posterUrl}
-                  style={{
-                    height: 440,
-                    objectFit: "cover",
-                  }}
-                />
+                <CSSTransition
+                  style={{ height: 440 }}
+                  in={loading}
+                  classNames="my-node"
+                  timeout={500}
+                  unmountOnExit
+                >
+                  <img
+                    alt="example"
+                    src={item.posterUrl}
+                    style={{
+                      height: 440,
+                      objectFit: "cover",
+                    }}
+                  />
+                </CSSTransition>
               }
             >
-              <Text style={{ display: "block" }} type="secondary">
-                <Link> {item.nameRu}</Link>
-              </Text>
+              <CSSTransition in={loading} classNames="my-node" timeout={500} unmountOnExit>
+                <Text className="text" style={{ display: "block" }} type="secondary">
+                  <Link> {item.nameRu}</Link>
+                </Text>
+              </CSSTransition>
             </Card>
           </Col>
         ))}

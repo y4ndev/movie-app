@@ -1,9 +1,9 @@
 import React from "react";
 import { Layout, Menu, Image, Typography } from "antd";
 import logo from "../../assets/img/logo.png";
+import { Link } from "react-router-dom";
 const { Sider } = Layout;
 const { Title } = Typography;
-const menuList = ["Жанры", "Премьеры", "Избранное"];
 
 const Sidebar: React.FC = () => {
   return (
@@ -28,13 +28,15 @@ const Sidebar: React.FC = () => {
           Movie-app
         </Title>
         <Menu
+          defaultSelectedKeys={["premiers"]}
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["4"]}
-          items={menuList.map((item, index) => ({
-            key: String(index + 1),
-            label: `${item}`,
-          }))}
+          items={[
+            { label: <Link to="/premiers">Премьеры</Link>, key: "premiers" },
+            { label: <Link to="/popular">Популярные</Link>, key: "popular" },
+            { label: <Link to="/genres">Жанры</Link>, key: "genres" },
+            { label: <Link to="/favorites">Избранное</Link>, key: "favorites" },
+          ]}
         />
       </Sider>
     </>

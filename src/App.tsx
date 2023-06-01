@@ -1,5 +1,10 @@
 import React from "react";
+import { Routes, Route, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { Favoritespage } from "./pages/Favoritespage";
+import { Genrespage } from "./pages/Genrespage";
+import { Premierespage } from "./pages/Premierespage";
 import { _Header } from "./components/Header";
 import { _Search } from "./components/Search";
 import { Layout, theme } from "antd";
@@ -49,22 +54,19 @@ export const genresArr = {
 };
 
 const App: React.FC = () => {
-  const [data, setData] = React.useState<IData[]>([]);
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
-  const [dataStatus, setDataStatus] = React.useState<boolean>(false);
-  const [filter, setFilter] = React.useState<string>("");
+  const [data, setData] = useState<IData[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [dataStatus, setDataStatus] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>("");
+  const [sort, setSort] = useState<string>("");
 
-  React.useEffect(() => {
+  function filterHandler(val: string) {
+    setFilter(val);
+    setCurrentPage(1);
+  }
+
+  useEffect(() => {
     const _filter = `&genres=${filter}`;
-    // axios
-    //   .get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/filters`, {
-    //     method: "GET",
-    //     headers: {
-    //       "X-API-KEY": "4c89bc1d-4237-4c3a-a0e0-0f740083b048",
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //   .then((res) => console.log(res));
     axios
       .get(
         `https://kinopoiskapiunofficial.tech/api/v2.2/films/?page=${currentPage}${
@@ -79,9 +81,8 @@ const App: React.FC = () => {
         }
       )
       .then((res) => {
-        setTimeout(() => {
-          setDataStatus(true);
-        }, 700);
+        setDataStatus(true);
+
         console.log(res);
         setData(res.data.items);
       });
@@ -106,7 +107,10 @@ const App: React.FC = () => {
         <Layout>
           <Content style={{ margin: "0 22px 0" }}>
             <div style={{ padding: 24, minHeight: "700px", background: colorBgContainer }}>
-              <Sort setFilter={setFilter} />
+              <Routes>
+                <Route path="/favorites" element={<Favoritespage />} />
+              </Routes>
+              <Sort setFilter={filterHandler} />
               <Catalog
                 loading={dataStatus}
                 setCurrent={setCurrentPage}

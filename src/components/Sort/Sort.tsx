@@ -23,7 +23,7 @@ const Sort: React.FC<ISort> = ({ setFilter }) => {
       >
         {genresArr.genres.map(({ genre, id }: { genre: string; id: number }, index) => (
           <Radio.Button
-            onClick={() => console.log(`${index}`)}
+            onClick={() => setFilter(`${index + 1}`)}
             key={id}
             style={{ marginBottom: 10, borderRadius: 0 }}
             value={genre}
