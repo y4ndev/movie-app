@@ -12,6 +12,7 @@ import { Catalog } from "./components/Catalog";
 import { IData } from "./types/data";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Sort } from "./components/Sort";
+import { useAppSelector } from "./store/hook";
 
 const { Content, Footer } = Layout;
 
@@ -55,22 +56,18 @@ export const genresArr = {
 
 const App: React.FC = () => {
   const [data, setData] = useState<IData[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [dataStatus, setDataStatus] = useState<boolean>(false);
-  const [filter, setFilter] = useState<string>("");
-  const [sort, setSort] = useState<string>("");
 
-  function filterHandler(val: string) {
-    setFilter(val);
-    setCurrentPage(1);
-  }
+  const { categoryId, currentPage } = useAppSelector((state) => state.filter);
+
+ 
 
   useEffect(() => {
-    const _filter = `&genres=${filter}`;
+    const _filter = `&genres=${categoryId}`;
     axios
       .get(
-        `https://kinopoiskapiunofficial.tech/api/v2.2/films/?page=${currentPage}${
-          filter !== "" ? _filter : ""
+        `https://kinopoiskapiunofficial.tech/api/v2.2/films/?type=FILM&page=${currentPage}${
+          categoryId !== "" ? _filter : ""
         }`,
         {
           method: "GET",
@@ -93,7 +90,7 @@ const App: React.FC = () => {
     });
 
     setDataStatus(false);
-  }, [currentPage, filter]);
+  }, [currentPage, categoryId]);
 
   const {
     token: { colorBgContainer },
@@ -110,10 +107,10 @@ const App: React.FC = () => {
               <Routes>
                 <Route path="/favorites" element={<Favoritespage />} />
               </Routes>
-              <Sort setFilter={filterHandler} />
+              <Sort />
               <Catalog
                 loading={dataStatus}
-                setCurrent={setCurrentPage}
+                
                 page={currentPage}
                 movies={data}
               />

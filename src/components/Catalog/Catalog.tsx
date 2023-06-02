@@ -1,22 +1,25 @@
 import React from "react";
+import { setCurrentPage } from "../../store/slices/filterSlice";
 import type { PaginationProps } from "antd";
 import { CSSTransition } from "react-transition-group";
-import { Card, Spin, Row, Col, Typography, Pagination } from "antd";
+import { Card, Row, Col, Typography, Pagination } from "antd";
 import { IData } from "../../types/data";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 
 const { Text, Link } = Typography;
 
 interface ICatalog {
   movies: IData[];
   page: number;
-  setCurrent: (page: number) => void;
   loading: boolean;
 }
 
-const Catalog: React.FC<ICatalog> = ({ movies, page, setCurrent, loading }) => {
+const Catalog: React.FC<ICatalog> = ({ movies, loading }) => {
+  const { currentPage } = useAppSelector((state) => state.filter);
+  const dispatch = useAppDispatch();
+
   const onChange: PaginationProps["onChange"] = (page) => {
-    console.log(page);
-    setCurrent(page);
+    dispatch(setCurrentPage(page));
   };
   return (
     <>
@@ -53,7 +56,12 @@ const Catalog: React.FC<ICatalog> = ({ movies, page, setCurrent, loading }) => {
             </Card>
           </Col>
         ))}
-        <Pagination style={{ margin: "0 auto" }} current={page} onChange={onChange} total={50} />
+        <Pagination
+          style={{ margin: "0 auto" }}
+          current={currentPage}
+          onChange={onChange}
+          total={50}
+        />
       </Row>
     </>
   );

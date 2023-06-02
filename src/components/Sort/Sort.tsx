@@ -1,12 +1,11 @@
 import React from "react";
+import { setCategoryId } from "../../store/slices/filterSlice";
 import { genresArr } from "../../App";
 import { Radio } from "antd";
+import { useAppDispatch } from "../../store/hook";
 
-interface ISort {
-  setFilter: (filter: string) => void;
-}
-
-const Sort: React.FC<ISort> = ({ setFilter }) => {
+const Sort: React.FC = () => {
+  const dispatch = useAppDispatch();
   return (
     <>
       <Radio.Group
@@ -23,7 +22,7 @@ const Sort: React.FC<ISort> = ({ setFilter }) => {
       >
         {genresArr.genres.map(({ genre, id }: { genre: string; id: number }, index) => (
           <Radio.Button
-            onClick={() => setFilter(`${index + 1}`)}
+            onClick={() => dispatch(setCategoryId(`${index + 1}`))}
             key={id}
             style={{ marginBottom: 10, borderRadius: 0 }}
             value={genre}
