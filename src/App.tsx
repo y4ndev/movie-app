@@ -1,7 +1,8 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { IData } from "./types/data";
+import { fetchData } from "./store/slices/dataSlice";
 import { Favoritespage } from "./pages/Favoritespage";
 import { Genrespage } from "./pages/Genrespage";
 import { Premierespage } from "./pages/Premierespage";
@@ -9,10 +10,10 @@ import { _Header } from "./components/Header";
 import { _Search } from "./components/Search";
 import { Layout, theme } from "antd";
 import { Catalog } from "./components/Catalog";
-import { IData } from "./types/data";
+
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Sort } from "./components/Sort";
-import { useAppSelector } from "./store/hook";
+import { useAppDispatch, useAppSelector } from "./store/hook";
 
 const { Content, Footer } = Layout;
 
@@ -55,41 +56,38 @@ export const genresArr = {
 };
 
 const App: React.FC = () => {
-  const [data, setData] = useState<IData[]>([]);
-  const [dataStatus, setDataStatus] = useState<boolean>(false);
+  // const [data, setData] = useState<IData[]>([]);
+  // const [loading, setLoading] = useState<boolean>(false);
 
   const { categoryId, currentPage } = useAppSelector((state) => state.filter);
-
- 
+  const { data, loading } = useAppSelector((state) => state.data);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const _filter = `&genres=${categoryId}`;
-    axios
-      .get(
-        `https://kinopoiskapiunofficial.tech/api/v2.2/films/?type=FILM&page=${currentPage}${
-          categoryId !== "" ? _filter : ""
-        }`,
-        {
-          method: "GET",
-          headers: {
-            "X-API-KEY": "4c89bc1d-4237-4c3a-a0e0-0f740083b048",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((res) => {
-        setDataStatus(true);
+    const filter = categoryId !== "" ? `&genres=${categoryId}` : "";
+    // axios
+    //   .get(
+    //     `https://kinopoiskapiunofficial.tech/api/v2.2/films/?type=FILM&page=${currentPage}${filter}`,
+    //     {
+    //       method: "GET",
+    //       headers: {
+    //         "X-API-KEY": "4c89bc1d-4237-4c3a-a0e0-0f740083b048",
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
+    //     setLoading(true);
+    //     setData(res.data.items);
+    //   });
 
-        console.log(res);
-        setData(res.data.items);
-      });
+    dispatch(fetchData({ currentPage, filter }));
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: "smooth",
     });
-
-    setDataStatus(false);
+    
   }, [currentPage, categoryId]);
 
   const {
@@ -105,15 +103,11 @@ const App: React.FC = () => {
           <Content style={{ margin: "0 22px 0" }}>
             <div style={{ padding: 24, minHeight: "700px", background: colorBgContainer }}>
               <Routes>
+                <Route path="/" element={<Premierespage />} />
                 <Route path="/favorites" element={<Favoritespage />} />
               </Routes>
               <Sort />
-              <Catalog
-                loading={dataStatus}
-                
-                page={currentPage}
-                movies={data}
-              />
+              <Catalog loading={loading} movies={data} />
             </div>
           </Content>
           <Footer style={{ textAlign: "center" }}>Ant Design ©2023 Created by Ant UED</Footer>

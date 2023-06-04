@@ -10,7 +10,6 @@ const { Text, Link } = Typography;
 
 interface ICatalog {
   movies: IData[];
-  page: number;
   loading: boolean;
 }
 
@@ -24,8 +23,8 @@ const Catalog: React.FC<ICatalog> = ({ movies, loading }) => {
   return (
     <>
       <Row gutter={[10, 10]}>
-        {movies.map((item: IData) => (
-          <Col key={item.filmId} lg={{ span: 6 }} md={{ span: 6 }} xs={24}>
+        {movies.map((item: IData, index) => (
+          <Col key={index} lg={{ span: 6 }} md={{ span: 6 }} xs={24}>
             <Card
               hoverable
               style={{ maxWidth: 320, textAlign: "center", overflow: "hidden" }}
@@ -34,7 +33,7 @@ const Catalog: React.FC<ICatalog> = ({ movies, loading }) => {
                   style={{ height: 440 }}
                   in={loading}
                   classNames="my-node"
-                  timeout={500}
+                  timeout={700}
                   unmountOnExit
                 >
                   <img
@@ -48,7 +47,7 @@ const Catalog: React.FC<ICatalog> = ({ movies, loading }) => {
                 </CSSTransition>
               }
             >
-              <CSSTransition in={loading} classNames="my-node" timeout={500} unmountOnExit>
+              <CSSTransition in={loading} classNames="my-node" timeout={700} unmountOnExit>
                 <Text className="text" style={{ display: "block" }} type="secondary">
                   <Link> {item.nameRu}</Link>
                 </Text>
