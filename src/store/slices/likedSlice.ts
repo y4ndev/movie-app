@@ -1,18 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-interface IFilter {
+interface ILiked {
   categoryId: string;
   currentPage: number;
 }
 
-const initialState: IFilter = {
+const initialState: ILiked = {
   categoryId: "",
   currentPage: 1,
 };
 
-export const filterSlice = createSlice({
-  name: "filter",
+export const likedSlice = createSlice({
+  name: "liked",
   initialState,
   reducers: {
     setCategoryId: (state, action: PayloadAction<string>) => {
@@ -25,8 +25,8 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setCategoryId, setCurrentPage } = filterSlice.actions;
+export const { setCategoryId, setCurrentPage } = likedSlice.actions;
 
 // export const selectFilter = (state: RootState) => state.filter;
 
-export default filterSlice.reducer;
+export default likedSlice.reducer;

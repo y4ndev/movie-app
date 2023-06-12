@@ -1,21 +1,12 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { IData } from "./types/data";
-import { fetchData } from "./store/slices/dataSlice";
 import { Favoritespage } from "./pages/Favoritespage";
 import { Genrespage } from "./pages/Genrespage";
 import { Premierespage } from "./pages/Premierespage";
 import { _Header } from "./components/Header";
 import { _Search } from "./components/Search";
-import { Layout, theme } from "antd";
-import { Catalog } from "./components/Catalog";
-
-import { Sidebar } from "./components/Sidebar/Sidebar";
-import { Sort } from "./components/Sort";
-import { useAppDispatch, useAppSelector } from "./store/hook";
-
-const { Content, Footer } = Layout;
+import { _Layout } from "./components/Layout";
+import { Homepage } from "./pages/Homepage";
 
 export const genresArr = {
   genres: [
@@ -56,64 +47,15 @@ export const genresArr = {
 };
 
 const App: React.FC = () => {
-  // const [data, setData] = useState<IData[]>([]);
-  // const [loading, setLoading] = useState<boolean>(false);
-
-  const { categoryId, currentPage } = useAppSelector((state) => state.filter);
-  const { data, loading } = useAppSelector((state) => state.data);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const filter = categoryId !== "" ? `&genres=${categoryId}` : "";
-    // axios
-    //   .get(
-    //     `https://kinopoiskapiunofficial.tech/api/v2.2/films/?type=FILM&page=${currentPage}${filter}`,
-    //     {
-    //       method: "GET",
-    //       headers: {
-    //         "X-API-KEY": "4c89bc1d-4237-4c3a-a0e0-0f740083b048",
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     setLoading(true);
-    //     setData(res.data.items);
-    //   });
-
-    dispatch(fetchData({ currentPage, filter }));
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-    
-  }, [currentPage, categoryId]);
-
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
   return (
-    <Layout>
-      <_Header />
-      <Layout>
-        <Sidebar />
-        <Layout>
-          <Content style={{ margin: "0 22px 0" }}>
-            <div style={{ padding: 24, minHeight: "700px", background: colorBgContainer }}>
-              <Routes>
-                <Route path="/" element={<Premierespage />} />
-                <Route path="/favorites" element={<Favoritespage />} />
-              </Routes>
-              <Sort />
-              <Catalog loading={loading} movies={data} />
-            </div>
-          </Content>
-          <Footer style={{ textAlign: "center" }}>Ant Design ©2023 Created by Ant UED</Footer>
-        </Layout>
-      </Layout>
-    </Layout>
+    <Routes>
+      <Route path="/" element={<_Layout />}>
+        <Route index element={<Homepage />} />
+        <Route path="/premiers" element={<Premierespage />} />
+        <Route path="/genres" element={<Genrespage />} />
+        <Route path="/favorites" element={<Favoritespage />} />
+      </Route>
+    </Routes>
   );
 };
 

@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { HeartTwoTone } from "@ant-design/icons";
 import { setCurrentPage } from "../../store/slices/filterSlice";
+import { setItemLikes } from "../../store/slices/dataSlice";
 import type { PaginationProps } from "antd";
 import { CSSTransition } from "react-transition-group";
 import { Card, Row, Col, Typography, Pagination } from "antd";
@@ -14,20 +16,34 @@ interface ICatalog {
 }
 
 const Catalog: React.FC<ICatalog> = ({ movies, loading }) => {
+
   const { currentPage } = useAppSelector((state) => state.filter);
   const dispatch = useAppDispatch();
+
+  const items = movies.map((item) => {
+    return { ...item, ...{ liked: false } };
+  });
 
   const onChange: PaginationProps["onChange"] = (page) => {
     dispatch(setCurrentPage(page));
   };
+
+  console.log(movies);
+
   return (
     <>
       <Row gutter={[10, 10]}>
         {movies.map((item: IData, index) => (
           <Col key={index} lg={{ span: 6 }} md={{ span: 6 }} xs={24}>
             <Card
+              className="card"
               hoverable
-              style={{ maxWidth: 320, textAlign: "center", overflow: "hidden" }}
+              style={{
+                maxWidth: 320,
+                textAlign: "center",
+                overflow: "hidden",
+                position: "relative",
+              }}
               cover={
                 <CSSTransition
                   style={{ height: 440 }}
@@ -52,6 +68,17 @@ const Catalog: React.FC<ICatalog> = ({ movies, loading }) => {
                   <Link> {item.nameRu}</Link>
                 </Text>
               </CSSTransition>
+              <HeartTwoTone
+                onClick={() => dispatch(setItemLikes({ id: item.filmId }))}
+                twoToneColor={item.liked ? "#eb2f96" : "#ffffff"}
+                style={{
+                  position: "absolute",
+                  top: 7,
+                  right: 7,
+                  fontSize: 24,
+                  transition: "fill 3s",
+                }}
+              />
             </Card>
           </Col>
         ))}

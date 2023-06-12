@@ -19,7 +19,9 @@ const Sidebar: React.FC = () => {
         }}
       >
         <div className="demo-logo-vertical" />
+
         <Image src={logo} preview={false} />
+
         <Title
           italic
           style={{ textAlign: "center", marginTop: 10, marginBottom: 50, color: "#ffffff" }}
@@ -28,12 +30,12 @@ const Sidebar: React.FC = () => {
           Movie-app
         </Title>
         <Menu
-          defaultSelectedKeys={["premiers"]}
+          defaultSelectedKeys={["home"]}
           theme="dark"
           mode="inline"
           items={[
+            { label: <Link to="/">Главная</Link>, key: "home" },
             { label: <Link to="/premiers">Премьеры</Link>, key: "premiers" },
-            { label: <Link to="/popular">Популярные</Link>, key: "popular" },
             { label: <Link to="/genres">Жанры</Link>, key: "genres" },
             { label: <Link to="/favorites">Избранное</Link>, key: "favorites" },
           ]}

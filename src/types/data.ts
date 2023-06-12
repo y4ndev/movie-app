@@ -13,4 +13,5 @@ export interface IData {
   type?: string;
   year?: number;
   filmId?: number;
+  liked?: boolean;
 }
