@@ -16,13 +16,9 @@ interface ICatalog {
 }
 
 const Catalog: React.FC<ICatalog> = ({ movies, loading }) => {
-
   const { currentPage } = useAppSelector((state) => state.filter);
+  const { likedMovies } = useAppSelector((state) => state.data);
   const dispatch = useAppDispatch();
-
-  const items = movies.map((item) => {
-    return { ...item, ...{ liked: false } };
-  });
 
   const onChange: PaginationProps["onChange"] = (page) => {
     dispatch(setCurrentPage(page));
@@ -69,8 +65,10 @@ const Catalog: React.FC<ICatalog> = ({ movies, loading }) => {
                 </Text>
               </CSSTransition>
               <HeartTwoTone
-                onClick={() => dispatch(setItemLikes({ id: item.filmId }))}
-                twoToneColor={item.liked ? "#eb2f96" : "#ffffff"}
+                onClick={() => dispatch(setItemLikes({ id: item.filmId || item.kinopoiskId }))}
+                twoToneColor={
+                  likedMovies[(item.filmId || item.kinopoiskId) ?? ""] ? "#eb2f96" : "#ffffff"
+                }
                 style={{
                   position: "absolute",
                   top: 7,

@@ -1,6 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { stat } from "fs";
 import { IData } from "../../types/data";
 
 enum StatusCode {
@@ -9,9 +8,13 @@ enum StatusCode {
   ERROR = "error",
 }
 
+interface ILikedMovies {
+  [movieId: string]: boolean;
+}
+
 interface IMovieData {
   data: IData[];
-  like: boolean;
+  likedMovies: ILikedMovies;
   loading: boolean;
   status: StatusCode;
   error: string | null;
@@ -21,7 +24,7 @@ export const fetchData = createAsyncThunk<IData[], { currentPage: number; filter
   "data/fetchData",
   async function ({ currentPage, filter }) {
     const resp = await axios.get(
-      `https://kinopoiskapiunofficial.tech/api/v2.2/films/?type=FILM&page=${currentPage}${filter}`,
+      `https://kinopoiskapiunofficial.tech/api/v2.2/films?type=FILM&page=${currentPage}${filter}`,
       {
         method: "GET",
         headers: {
@@ -36,13 +39,16 @@ export const fetchData = createAsyncThunk<IData[], { currentPage: number; filter
 );
 
 export const fetchDataTop = createAsyncThunk<IData[]>("data/fetchDataTop", async function () {
-  const resp = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/?type=FILM`, {
-    method: "GET",
-    headers: {
-      "X-API-KEY": "4c89bc1d-4237-4c3a-a0e0-0f740083b048",
-      "Content-Type": "application/json",
-    },
-  });
+  const resp = await axios.get(
+    `https://kinopoiskapiunofficial.tech/api/v2.2/films/premieres?year=2023&month=MAY`,
+    {
+      method: "GET",
+      headers: {
+        "X-API-KEY": "4c89bc1d-4237-4c3a-a0e0-0f740083b048",
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   return resp.data.items as IData[];
 });
@@ -67,7 +73,7 @@ export const fetchDataBest = createAsyncThunk<IData[], { currentPage: number }>(
 
 const initialState: IMovieData = {
   data: [],
-  like: false,
+  likedMovies: {},
   status: StatusCode.LOADING,
   loading: false,
   error: null,
@@ -82,12 +88,7 @@ export const dataSlice = createSlice({
     },
     setItemLikes: (state, action) => {
       const { id } = action.payload;
-      const arrIndex = state.data.findIndex((user) => user.filmId === id);
-      if (arrIndex !== -1 && !state.data[arrIndex].liked) {
-        state.data[arrIndex] = { ...state.data[arrIndex], liked: !state.like };
-      } else {
-        state.data[arrIndex].liked = state.like;
-      }
+      state.likedMovies[id] = !state.likedMovies[id];
     },
   },
 

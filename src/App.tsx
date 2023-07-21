@@ -3,6 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import { Favoritespage } from "./pages/Favoritespage";
 import { Genrespage } from "./pages/Genrespage";
 import { Premierespage } from "./pages/Premierespage";
+import { Cardpage } from "./pages/Cardpage";
 import { _Header } from "./components/Header";
 import { _Search } from "./components/Search";
 import { _Layout } from "./components/Layout";
@@ -54,6 +55,7 @@ const App: React.FC = () => {
         <Route path="/premiers" element={<Premierespage />} />
         <Route path="/genres" element={<Genrespage />} />
         <Route path="/favorites" element={<Favoritespage />} />
+        <Route path="film/:id" element={<Cardpage />} />
       </Route>
     </Routes>
   );
